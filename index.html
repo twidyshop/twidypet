@@ -164,7 +164,35 @@ $('#soundToggle').onclick=()=>{state.sound=!state.sound;save();render();toast('E
 $('#animationToggle').onclick=()=>{state.animations=!state.animations;save();render();toast('Animasi '+(state.animations?'aktif':'nonaktif')+'.');};
 $('#exportBtn').onclick=()=>{let blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='twidypet-progress.json';a.click();URL.revokeObjectURL(url);toast('File progres berhasil disiapkan.');};
 $('#resetBtn').onclick=()=>modal('Reset permainan?','Semua koin, item, level, dan statistik akan kembali ke awal. Ekspor progres terlebih dahulu jika ingin menyimpan salinan.','⚠️',[{label:'Batal',fn:closeModal},{label:'Reset semua',primary:true,fn:()=>{state=defaultState();save();closeModal();render();go('home');toast('Permainan dimulai kembali. Selamat bermain!');}}]);
-$('#startGame').onclick=()=>{if(gameRunning){gameScore++;$('#gameScoreLive').textContent=gameScore;$('#gameStatus').textContent='Mantap! Kamu menangkap ikan. Skor: '+gameScore;return;}gameRunning=true;gameScore=0;gameSeconds=15;$('#gameEmoji').textContent='🐟';$('#gameTitle').textContent='Tangkap ikannya!';$('#gameDescription').textContent='Ketuk tombol ikan sebanyak mungkin sebelum waktu habis!';$('#startGame').textContent='🐟 Tangkap ikan!';$('#gameStatus').textContent='Mulai! Ketuk tombol ikan dengan cepat.';$('#startGame').onclick=()=>{if(gameRunning){gameScore++;$('#gameScore').textContent=gameScore;$('#gameStatus').textContent='Nice! Tangkapan: '+gameScore;$('#gameEmoji').textContent=['🐟','🐠','🐡','🦀'][Math.floor(Math.random()*4)];}};let box=$('.game-box');let score=document.createElement('div');score.id='gameScore';score.className='game-score';score.style.left='14px';score.style.right='auto';score.textContent='Skor: 0';box.appendChild(score);gameTimer=setInterval(()=>{gameSeconds--;$('#gameTimerBar').style.width=(gameSeconds/15*100)+'%';if(gameSeconds<=0){clearInterval(gameTimer);gameRunning=false;let bonus=gameScore>=10?50:gameScore>=5?25:gameScore>=1?10:0;state.coins+=bonus;addXp(5);if(gameScore>state.bestScore)state.bestScore=gameScore;addActivity('🎮','Mini game selesai','Skor '+gameScore+' · +'+bonus+' koin');save();render();$('#gameTitle').textContent='Permainan selesai!';$('#gameEmoji').textContent=gameScore>=10?'🏆':'🐱';$('#gameDescription').textContent='Kamu mendapat '+gameScore+' tangkapan dan bonus '+bonus+' koin. Yuk main lagi!';$('#startGame').textContent='Main lagi ↻';$('#startGame').onclick=()=>{gameRunning=false;$('#gameTimerBar').style.width='100%';$('#gameScore')?.remove();$('#startGame').onclick=null;$('#startGame').click();};$('#gameStatus').textContent='Ronde selesai! +'+bonus+' koin dan +5 XP.';}} ,1000);};
+function startGame(){
+ if(gameRunning)return;
+ gameRunning=true;gameScore=0;gameSeconds=15;
+ $('#gameEmoji').textContent='🐟';$('#gameTitle').textContent='Tangkap ikannya!';
+ $('#gameDescription').textContent='Ketuk tombol ikan sebanyak mungkin sebelum waktu habis!';
+ $('#startGame').textContent='🐟 Tangkap ikan!';
+ $('#gameStatus').textContent='Mulai! Ketuk tombol ikan dengan cepat.';
+ let score=$('#gameScore');
+ if(!score){score=document.createElement('div');score.id='gameScore';score.className='game-score';score.style.left='14px';score.style.right='auto';$('.game-box').appendChild(score);}
+ score.textContent='Skor: 0';$('#gameTimerBar').style.width='100%';
+ $('#startGame').onclick=()=>{if(!gameRunning)return;gameScore++;$('#gameScore').textContent='Skor: '+gameScore;$('#gameStatus').textContent='Nice! Tangkapan: '+gameScore;$('#gameEmoji').textContent=['🐟','🐠','🐡','🦀'][Math.floor(Math.random()*4)];};
+ clearInterval(gameTimer);
+ gameTimer=setInterval(()=>{
+   gameSeconds--;$('#gameTimerBar').style.width=(gameSeconds/15*100)+'%';
+   if(gameSeconds<=0){
+     clearInterval(gameTimer);gameRunning=false;
+     let bonus=gameScore>=10?50:gameScore>=5?25:gameScore>=1?10:0;
+     state.coins+=bonus;addXp(5);if(gameScore>state.bestScore)state.bestScore=gameScore;
+     addActivity('🎮','Mini game selesai','Skor '+gameScore+' · +'+bonus+' koin');
+     save();render();$('#gameScore')?.remove();
+     $('#gameTitle').textContent='Permainan selesai!';
+     $('#gameEmoji').textContent=gameScore>=10?'🏆':'🐱';
+     $('#gameDescription').textContent='Kamu mendapat '+gameScore+' tangkapan dan bonus '+bonus+' koin. Yuk main lagi!';
+     $('#startGame').textContent='Main lagi ↻';$('#startGame').onclick=startGame;
+     $('#gameStatus').textContent='Ronde selesai! +'+bonus+' koin dan +5 XP.';
+   }
+ },1000);
+}
+$('#startGame').onclick=startGame;
 const originalStart=()=>{}; // game handler is replaced per round to support rapid taps.
 render();
 })();
