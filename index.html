@@ -31,8 +31,8 @@
 .world-flower{position:absolute;bottom:17%;font-size:25px;filter:drop-shadow(0 2px 0 #ffffff55)}.world-flower.f1{left:8%}.world-flower.f2{right:12%;bottom:24%}.world-flower.f3{left:37%;font-size:18px;bottom:12%}
 .world-tree{position:absolute;right:5%;bottom:17%;font-size:68px;filter:drop-shadow(0 7px 0 #43885d55)}
 .world-pet{position:absolute;left:50%;bottom:12%;width:clamp(130px,20vw,190px);transform:translateX(-50%);transform-origin:50% 100%;transition:left .42s cubic-bezier(.2,.8,.2,1);z-index:3;cursor:pointer;touch-action:manipulation;filter:drop-shadow(0 12px 8px #29405a44)}
-.world-pet svg{display:block;width:100%;height:auto;overflow:visible;animation:pet-idle 2.4s ease-in-out infinite}
-.world-pet.walking svg{animation:pet-walk .34s ease-in-out infinite}.world-pet.running svg{animation:pet-walk .18s ease-in-out infinite}.world-pet.jumping svg{animation:pet-jump .62s cubic-bezier(.25,.7,.35,1)}.world-pet.dancing svg{animation:pet-dance .6s ease-in-out 3}.world-pet.sleeping svg{animation:pet-sleep 2s ease-in-out infinite}
+.world-pet .pet-rig{display:block;width:100%;height:auto;overflow:visible;animation:none!important}
+
 .world-pet.facing-left{transform:translateX(-50%) scaleX(-1)}
 .world-pet .pet-shadow{position:absolute;bottom:-2px;left:25%;width:50%;height:13px;background:#2e634c66;border-radius:50%;filter:blur(4px);z-index:-1}
 .world-pet .pet-bubble{position:absolute;left:50%;top:-34px;transform:translateX(-50%);background:#fff;color:#34445d;padding:7px 12px;border-radius:15px;font-weight:800;font-size:12px;white-space:nowrap;box-shadow:0 4px 12px #2b496522;opacity:0;pointer-events:none}
@@ -247,32 +247,69 @@ render();
 
 <script>
 (function(){
-const $=s=>document.querySelector(s);
-const scene=$('#petWorldScene'),pet=$('#worldPet'),bubble=$('#worldBubble'),status=$('#worldMood');
+const $=s=>document.querySelector(s),scene=$('#petWorldScene'),pet=$('#worldPet'),bubble=$('#worldBubble'),status=$('#worldMood');
 if(!scene||!pet)return;
-const source=document.querySelector('#page-home .twidy-art');
-if(source){const art=source.cloneNode(true);art.removeAttribute('role');art.setAttribute('aria-hidden','true');pet.appendChild(art);}
-let x=50,face='right',walkTimer=null,actionTimer=null,isSleeping=false;
-function say(t){bubble.textContent=t;bubble.classList.add('show');clearTimeout(bubble._timer);bubble._timer=setTimeout(()=>bubble.classList.remove('show'),1900);}
-function setMood(t){status.textContent='● '+t;}
-function place(){pet.style.left=x+'%';pet.classList.toggle('facing-left',face==='left');}
-function stopMotion(){clearTimeout(actionTimer);pet.classList.remove('walking','running','jumping','dancing','sleeping');isSleeping=false;}
-function move(dir,run=false){stopMotion();face=dir<0?'left':'right';x=Math.max(9,Math.min(91,x+dir*(run?13:6)));place();pet.classList.add(run?'running':'walking');setMood(run?'Sedang berlari!':'Sedang berjalan');say(run?'Wheee!':'Tap tap...');actionTimer=setTimeout(()=>{pet.classList.remove('walking','running');setMood('Siap bermain')},run?500:470);}
-function jump(){stopMotion();pet.classList.add('jumping');setMood('Melompat tinggi!');say('Yattaaa! ✨');setTimeout(()=>{pet.classList.remove('jumping');setMood('Siap bermain')},650);}
-function dance(){stopMotion();pet.classList.add('dancing');setMood('Senang menari!');say('♪ (๑˃ᴗ˂)ﻭ ♫');actionTimer=setTimeout(()=>{pet.classList.remove('dancing');setMood('Twidy bahagia')},1800);}
-function sleep(){stopMotion();isSleeping=true;pet.classList.add('sleeping');setMood('Sedang tidur zzz');say('Zzz... 🌙');}
-function petting(){if(isSleeping){stopMotion();}say('Purr~ suka sekali! ♡');setMood('Merasa disayang');pet.classList.remove('sleeping');pet.animate([{transform:'translateX(-50%) scale(1)'},{transform:'translateX(-50%) scale(1.08,.94)'},{transform:'translateX(-50%) scale(1)'}],{duration:420});}
-$('#worldLeft').addEventListener('click',()=>move(-1));$('#worldRight').addEventListener('click',()=>move(1));
-$('#worldRun').addEventListener('click',()=>move(face==='left'?-1:1,true));
+const canvas=document.createElement('canvas');canvas.width=260;canvas.height=300;canvas.className='pet-rig';canvas.setAttribute('aria-hidden','true');pet.appendChild(canvas);
+const ctx=canvas.getContext('2d');let x=50,face=1,mode='idle',modeUntil=0,phase=0,isSleeping=false,last=0;
+function say(t){bubble.textContent=t;bubble.classList.add('show');clearTimeout(bubble._timer);bubble._timer=setTimeout(()=>bubble.classList.remove('show'),1900)}
+function setMood(t){status.textContent='● '+t}
+function place(){pet.style.left=x+'%';pet.classList.toggle('facing-left',face<0)}
+function setMode(m,duration=0){mode=m;modeUntil=duration?performance.now()+duration:0;isSleeping=m==='sleep';}
+function move(dir,run=false){face=dir<0?-1:1;x=Math.max(9,Math.min(91,x+dir*(run?13:6)));place();setMode(run?'run':'walk',run?520:460);setMood(run?'Sedang berlari!':'Sedang berjalan');say(run?'Wheee!':'Tap tap...')}
+function jump(){setMode('jump',780);setMood('Melompat tinggi!');say('Yattaaa! ✨')}
+function dance(){setMode('dance',1900);setMood('Senang menari!');say('♪ (๑˃ᴗ˂)ﻭ ♫')}
+function sleep(){setMode('sleep');setMood('Sedang tidur zzz');say('Zzz... 🌙')}
+function petting(){if(isSleeping){isSleeping=false;}setMode('love',600);setMood('Merasa disayang');say('Purr~ suka sekali! ♡')}
+function rr(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke()}}
+function ellipse(x,y,rx,ry,fill,rot=0){ctx.beginPath();ctx.ellipse(x,y,rx,ry,rot,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill()}
+function line(points,color,width=7){ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke()}
+function draw(t){
+ const dt=Math.min(.04,(t-last)/1000||.016);last=t;phase+=dt*(mode==='run'?15:mode==='walk'?9:mode==='dance'?8:2.5);
+ if(modeUntil&&t>modeUntil){mode='idle';modeUntil=0;setMood('Twidy bahagia')}
+ const p=phase,walking=mode==='walk'||mode==='run',speed=mode==='run'?1.7:1;
+ const bob=walking?Math.abs(Math.sin(p*speed))*5:mode==='idle'?Math.sin(p)*2.5:mode==='jump'?-Math.sin(Math.min(1,(t-(modeUntil-780))/780)*Math.PI)*65:mode==='sleep'?4:mode==='dance'?Math.sin(p*2)*8:mode==='love'?-3:0;
+ ctx.clearRect(0,0,260,300);ctx.save();ctx.translate(130,244+bob);
+ // shadow gets smaller during a jump
+ const air=Math.max(0,-bob/65);ctx.globalAlpha=.24-air*.13;ellipse(0,8,57-air*19,10-air*2,'#35516b');ctx.globalAlpha=1;
+ // tail swings independently
+ ctx.save();ctx.translate(39,-80);ctx.rotate(Math.sin(p*1.5)*(walking?.32:.13));line([[0,0],[13,-8],[19,-22],[14,-30]],'#f4f7fc',12);line([[0,0],[13,-8],[19,-22],[14,-30]],'#cbd8eb',2);ctx.restore();
+ // legs with separate gait, squash on landing
+ const gait=walking?Math.sin(p*speed)*18:mode==='dance'?Math.sin(p*2)*13:0;
+ ctx.save();ctx.translate(-18,-18);ctx.rotate(gait*Math.PI/180);rr(-12,-2,24,34,10,'#f5f7fc','#cbd8e7');ellipse(0,29,17,9,'#f9fbff');ctx.restore();
+ ctx.save();ctx.translate(18,-18);ctx.rotate(-gait*Math.PI/180);rr(-12,-2,24,34,10,'#f5f7fc','#cbd8e7');ellipse(0,29,17,9,'#f9fbff');ctx.restore();
+ // hoodie torso
+ ctx.beginPath();ctx.moveTo(-43,-104);ctx.quadraticCurveTo(-60,-90,-57,-46);ctx.quadraticCurveTo(-55,-27,-35,-25);ctx.lineTo(35,-25);ctx.quadraticCurveTo(55,-27,57,-46);ctx.quadraticCurveTo(60,-90,43,-104);ctx.quadraticCurveTo(0,-125,-43,-104);ctx.closePath();let coat=ctx.createLinearGradient(-45,-110,45,-25);coat.addColorStop(0,'#394963');coat.addColorStop(1,'#101827');ctx.fillStyle=coat;ctx.fill();ctx.strokeStyle='#64748b';ctx.lineWidth=2;ctx.stroke();
+ // arms swing with gait; raise them when jumping/dancing
+ const armSwing=walking?Math.sin(p*speed)*.48:mode==='jump'?.8:mode==='dance'?Math.sin(p*2)*.8:mode==='love'?-.7:.08;
+ ctx.save();ctx.translate(-43,-91);ctx.rotate(-armSwing);line([[0,0],[-8,19],[-3,34]],'#f4f7fc',19);line([[0,0],[-8,19],[-3,34]],'#cbd8e7',2);ellipse(-3,35,10,9,'#f7f9ff');ctx.restore();
+ ctx.save();ctx.translate(43,-91);ctx.rotate(armSwing);line([[0,0],[8,19],[3,34]],'#f4f7fc',19);line([[0,0],[8,19],[3,34]],'#cbd8e7',2);ellipse(3,35,10,9,'#f7f9ff');ctx.restore();
+ // hoodie pocket + logo
+ rr(-22,-73,44,25,9,'#202c40','#53637b');ctx.fillStyle='#a8c9ff';ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText('T',0,-55);
+ // head and ears
+ ctx.save();ctx.translate(0,-128);if(mode==='dance')ctx.rotate(Math.sin(p*2)*.09);
+ ctx.beginPath();ctx.moveTo(-47,-23);ctx.lineTo(-55,-72);ctx.quadraticCurveTo(-57,-82,-45,-74);ctx.lineTo(-20,-54);ctx.quadraticCurveTo(0,-63,20,-54);ctx.lineTo(45,-74);ctx.quadraticCurveTo(57,-82,55,-69);ctx.lineTo(47,-22);ctx.closePath();ctx.fillStyle='#f8fbff';ctx.fill();ctx.strokeStyle='#cbd8e7';ctx.lineWidth=2;ctx.stroke();
+ ctx.beginPath();ctx.moveTo(-47,-67);ctx.lineTo(-32,-55);ctx.lineTo(-45,-48);ctx.fillStyle='#f1a6c1';ctx.fill();ctx.beginPath();ctx.moveTo(47,-67);ctx.lineTo(32,-55);ctx.lineTo(45,-48);ctx.fill();
+ ellipse(0,-28,53,49,'#f9fbff');ctx.strokeStyle='#dbe5f2';ctx.lineWidth=1.5;ctx.stroke();
+ // cap
+ ctx.beginPath();ctx.ellipse(0,-60,48,16,0,Math.PI,Math.PI*2);ctx.lineTo(42,-56);ctx.quadraticCurveTo(0,-44,-42,-56);ctx.closePath();ctx.fillStyle='#202c40';ctx.fill();ctx.strokeStyle='#53637b';ctx.stroke();rr(-18,-75,36,12,5,'#31425c');ctx.fillStyle='#c2d8ff';ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.fillText('TWIDY',0,-66);
+ // eyes track the action; blink naturally
+ const blink=(Math.sin(t/1900)>0.992)||mode==='sleep';if(blink){line([[-28,-28],[-19,-26]],'#24334b',4);line([[19,-26],[28,-28]],'#24334b',4)}else{ellipse(-22,-29,8,12,'#3f80eb');ellipse(22,-29,8,12,'#3f80eb');ellipse(-20,-33,2.5,4,'#fff');ellipse(24,-33,2.5,4,'#fff');}
+ // cheeks + nose + mouth
+ ctx.globalAlpha=.7;ellipse(-34,-14,8,4,'#ffb5cb');ellipse(34,-14,8,4,'#ffb5cb');ctx.globalAlpha=1;ellipse(0,-17,4,3,'#e88da9');if(mode==='love'||mode==='dance'){line([[-7,-9],[0,-4],[7,-9]],'#5b5260',2.5)}else{line([[-6,-9],[0,-5],[6,-9]],'#5b5260',2.5)}
+ ctx.restore();
+ // action symbols
+ if(mode==='jump'||mode==='dance'){ctx.fillStyle='#fff3ad';ctx.font='bold 20px sans-serif';ctx.fillText('✦',-75,-145+Math.sin(p*3)*7);ctx.fillText('✧',65,-175+Math.cos(p*3)*7)}
+ if(mode==='sleep'){ctx.fillStyle='#fff';ctx.font='bold 18px sans-serif';ctx.fillText('Z',57,-160);ctx.font='bold 13px sans-serif';ctx.fillText('z',72,-181)}
+ ctx.restore();requestAnimationFrame(draw)
+}
+$('#worldLeft').addEventListener('click',()=>move(-1));$('#worldRight').addEventListener('click',()=>move(1));$('#worldRun').addEventListener('click',()=>move(face,true));
 $('#worldJump').addEventListener('click',jump);$('#worldDance').addEventListener('click',dance);$('#worldPetBtn').addEventListener('click',petting);
-$('#worldFeed').addEventListener('click',()=>{stopMotion();say('Nyam nyam! 🍓');setMood('Lagi makan');const b=document.querySelector('[data-care="feed"]');if(b)b.click();});
-$('#worldSleep').addEventListener('click',()=>{sleep();const b=document.querySelector('#page-pet [data-care="sleep"]');if(b)b.click();});
-pet.addEventListener('click',petting);pet.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();petting();}});
-document.addEventListener('keydown',e=>{if(!document.querySelector('#page-pet.active')||/INPUT|TEXTAREA/.test(document.activeElement.tagName))return;if(e.key==='ArrowLeft'){e.preventDefault();move(-1)}else if(e.key==='ArrowRight'){e.preventDefault();move(1)}else if(e.code==='Space'){e.preventDefault();jump();}});
-let wander=setInterval(()=>{if(document.hidden||!document.querySelector('#page-pet.active')||isSleeping||Math.random()>.48)return;move(Math.random()>.5?1:-1,false);},4200);
-const obs=new MutationObserver(()=>{if(!document.querySelector('#page-pet.active')){clearTimeout(actionTimer);pet.classList.remove('walking','running','jumping','dancing');}});
-obs.observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']});
-place();setTimeout(()=>say('Ayo jalan-jalan! ♡'),700);
+$('#worldFeed').addEventListener('click',()=>{setMode('eat',900);setMood('Lagi makan');say('Nyam nyam! 🍓');const b=document.querySelector('[data-care="feed"]');if(b)b.click()});
+$('#worldSleep').addEventListener('click',()=>{sleep();const b=document.querySelector('#page-pet [data-care="sleep"]');if(b)b.click()});
+pet.addEventListener('click',petting);pet.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();petting()}});
+document.addEventListener('keydown',e=>{if(!document.querySelector('#page-pet.active')||/INPUT|TEXTAREA/.test(document.activeElement.tagName))return;if(e.key==='ArrowLeft'){e.preventDefault();move(-1)}else if(e.key==='ArrowRight'){e.preventDefault();move(1)}else if(e.code==='Space'){e.preventDefault();jump()}});
+setInterval(()=>{if(document.hidden||!document.querySelector('#page-pet.active')||isSleeping||Math.random()>.38||mode!=='idle')return;move(Math.random()>.5?1:-1,false)},3600);
+place();requestAnimationFrame(draw);setTimeout(()=>say('Ayo jalan-jalan! ♡'),700);
 })();
 </script>
 </body>
