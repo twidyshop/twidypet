@@ -15,6 +15,44 @@
 @media(max-width:720px){.app{display:block}.sidebar{display:none}.main{padding:17px 15px calc(92px + env(safe-area-inset-bottom))}.topbar{margin-bottom:19px;align-items:center}.greeting h1{font-size:22px}.greeting small{font-size:10px}.top-actions{gap:6px}.icon-btn{width:37px;height:37px;border-radius:12px}.currency{padding:9px 9px;font-size:11px;gap:5px}.currency.gems{display:none}.hero{grid-template-columns:1fr;min-height:0}.hero:before{background:linear-gradient(180deg,#101a30e8,#152544a8 65%,#18264466)}.hero-copy{padding:25px 22px 0}.hero h2{font-size:33px;max-width:360px;margin-top:14px}.hero p{font-size:11px;max-width:320px;margin-bottom:16px}.hero-actions .primary,.hero-actions .secondary{padding:11px 13px;font-size:11px}.pet-stage{min-height:210px;margin-top:-4px}.twidy-art{width:205px;max-height:220px}.orb{width:190px}.speech{top:8%;right:12%;font-size:9px}.spark.s1{left:19%;top:12%}.spark.s2{right:17%;top:17%}.spark.s3{left:21%;bottom:13%}.section-head{margin:23px 0 12px}.section-head h3{font-size:17px}.stats{gap:9px}.stat{padding:13px;border-radius:15px}.stat strong{font-size:22px;margin:9px 0 5px}.stat-icon{width:30px;height:30px}.stat-top{font-size:10px}.stat .sub{font-size:9px}.lower-grid{gap:12px;margin-top:20px}.panel{padding:15px;border-radius:18px}.panel-title h3{font-size:15px}.quick-actions{gap:8px}.action-card{padding:13px 11px}.action-card .action-emoji{font-size:22px;margin-bottom:8px}.shop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.item-card{padding:10px;border-radius:15px}.item-art{height:100px;font-size:46px}.item-card h4{font-size:12px;margin-top:10px}.item-card p{font-size:9px;min-height:27px}.item-bottom button{padding:8px;font-size:9px}.price{font-size:10px}.inventory-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.inventory-item{padding:14px 7px}.inventory-item .big{font-size:29px}.play-card{grid-template-columns:1fr}.game-box{min-height:230px}.page-title{font-size:26px}.mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));padding:8px 5px;background:#111a2bec;border:1px solid #34415a;border-radius:19px;backdrop-filter:blur(18px);box-shadow:0 12px 40px #0007;z-index:40}.mobile-nav button{border:0;background:transparent;color:#8392af;display:grid;justify-items:center;gap:4px;padding:5px 1px;border-radius:12px;font-size:9px;font-weight:700}.mobile-nav button span{font-size:19px}.mobile-nav button.active{color:#bcd2ff;background:#769dff19}.toast-wrap{right:12px;bottom:calc(90px + env(safe-area-inset-bottom));left:12px}.toast{max-width:none}.profile-pet{width:105px;height:105px;font-size:58px}.profile-details h3{font-size:20px}}
 @media(max-width:380px){.main{padding-left:11px;padding-right:11px}.hero-copy{padding-left:17px;padding-right:17px}.hero h2{font-size:29px}.currency{font-size:10px}.stats{gap:7px}.stat{padding:11px}.stat strong{font-size:20px}.shop-grid{gap:8px}.item-bottom{align-items:flex-start;flex-direction:column}.item-bottom button{width:100%}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+/* Living virtual-pet world */
+#page-pet .pet-world{margin:24px 0 22px;border:1px solid #354566;border-radius:26px;overflow:hidden;background:#a8d9f2;box-shadow:0 22px 65px #0004;color:#18243a}
+.pet-world-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:17px 20px;background:#f7fbff}
+.pet-world-head strong{font:800 17px Outfit,sans-serif}.pet-world-head small{display:block;color:#71819b;margin-top:3px}
+.world-status{font-size:12px;font-weight:800;background:#e4f8ec;color:#24744a;padding:8px 12px;border-radius:999px}
+.pet-world-scene{position:relative;height:clamp(290px,43vw,420px);overflow:hidden;background:linear-gradient(#9bd9f6 0%,#d8f3ff 70%,#bce8a1 70%,#7bc879 100%);isolation:isolate}
+.pet-world-scene:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 78% 18%,#fff9 0 7%,transparent 7.5%),linear-gradient(transparent 65%,#fff2 65%);pointer-events:none}
+.world-sun{position:absolute;right:9%;top:10%;width:58px;height:58px;border-radius:50%;background:#fff1a9;box-shadow:0 0 0 13px #fff4,0 0 45px #fff9}
+.world-cloud{position:absolute;width:100px;height:26px;background:#ffffffb8;border-radius:40px;top:21%;left:12%;animation:cloud-drift 23s linear infinite}.world-cloud:before,.world-cloud:after{content:"";position:absolute;bottom:8px;background:inherit;border-radius:50%;width:38px;height:38px;left:18px}.world-cloud:after{left:47px;width:29px;height:29px}
+.world-cloud.c2{top:36%;left:66%;transform:scale(.7);animation-duration:31s}
+.world-hill{position:absolute;bottom:18%;width:70%;height:34%;background:#8ed78d;border-radius:50% 50% 0 0;left:-14%;opacity:.8}.world-hill.h2{left:47%;width:75%;height:28%;background:#a0e19a}
+.world-path{position:absolute;bottom:-5%;height:25%;width:100%;background:#e9d6a5;clip-path:polygon(0 48%,18% 20%,37% 35%,60% 15%,78% 35%,100% 18%,100% 100%,0 100%)}
+.world-flower{position:absolute;bottom:17%;font-size:25px;filter:drop-shadow(0 2px 0 #ffffff55)}.world-flower.f1{left:8%}.world-flower.f2{right:12%;bottom:24%}.world-flower.f3{left:37%;font-size:18px;bottom:12%}
+.world-tree{position:absolute;right:5%;bottom:17%;font-size:68px;filter:drop-shadow(0 7px 0 #43885d55)}
+.world-pet{position:absolute;left:50%;bottom:12%;width:clamp(130px,20vw,190px);transform:translateX(-50%);transform-origin:50% 100%;transition:left .42s cubic-bezier(.2,.8,.2,1);z-index:3;cursor:pointer;touch-action:manipulation;filter:drop-shadow(0 12px 8px #29405a44)}
+.world-pet svg{display:block;width:100%;height:auto;overflow:visible;animation:pet-idle 2.4s ease-in-out infinite}
+.world-pet.walking svg{animation:pet-walk .34s ease-in-out infinite}.world-pet.running svg{animation:pet-walk .18s ease-in-out infinite}.world-pet.jumping svg{animation:pet-jump .62s cubic-bezier(.25,.7,.35,1)}.world-pet.dancing svg{animation:pet-dance .6s ease-in-out 3}.world-pet.sleeping svg{animation:pet-sleep 2s ease-in-out infinite}
+.world-pet.facing-left{transform:translateX(-50%) scaleX(-1)}
+.world-pet .pet-shadow{position:absolute;bottom:-2px;left:25%;width:50%;height:13px;background:#2e634c66;border-radius:50%;filter:blur(4px);z-index:-1}
+.world-pet .pet-bubble{position:absolute;left:50%;top:-34px;transform:translateX(-50%);background:#fff;color:#34445d;padding:7px 12px;border-radius:15px;font-weight:800;font-size:12px;white-space:nowrap;box-shadow:0 4px 12px #2b496522;opacity:0;pointer-events:none}
+.world-pet .pet-bubble.show{opacity:1;animation:bubble-pop .25s ease-out}
+.world-controls{display:flex;align-items:center;gap:8px;padding:14px;background:#f7fbff;flex-wrap:wrap}
+.world-controls .move-controls{display:flex;gap:7px;margin-right:auto}
+.world-controls button{border:1px solid #d8e3f0;background:white;color:#24354d;border-radius:13px;padding:10px 13px;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #dbe5ef;transition:transform .15s,background .15s}
+.world-controls button:hover{background:#e8f4ff;transform:translateY(-2px)}.world-controls button:active{transform:translateY(2px);box-shadow:none}
+.world-controls button.primary-world{background:#426cf5;color:white;border-color:#426cf5;box-shadow:0 3px 0 #2f4db5}
+.world-tip{padding:0 16px 15px;background:#f7fbff;color:#71819b;font-size:12px}
+@keyframes pet-idle{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-7px) rotate(-1deg)}}
+@keyframes pet-walk{0%,100%{transform:translateY(0) rotate(-4deg) scaleY(.98)}50%{transform:translateY(-5px) rotate(4deg) scaleY(1.02)}}
+@keyframes pet-jump{0%,100%{transform:translateY(0) scale(1)}35%{transform:translateY(-105px) scale(1.04,.96)}65%{transform:translateY(-110px) scale(.98,1.03)}}
+@keyframes pet-dance{0%,100%{transform:rotate(0) translateY(0)}25%{transform:rotate(-13deg) translateY(-12px)}75%{transform:rotate(13deg) translateY(-12px)}}
+@keyframes pet-sleep{0%,100%{transform:rotate(0) translateY(3px) scaleY(.98)}50%{transform:rotate(-5deg) translateY(7px) scaleY(.94)}}
+@keyframes cloud-drift{0%{margin-left:-30px}50%{margin-left:40px}100%{margin-left:-30px}}
+@keyframes bubble-pop{from{transform:translateX(-50%) scale(.7)}to{transform:translateX(-50%) scale(1)}}
+@media(max-width:600px){#page-pet .pet-world{margin:18px 0;border-radius:20px}.pet-world-head{padding:14px}.pet-world-head strong{font-size:15px}.pet-world-scene{height:330px}.world-pet{width:155px;bottom:13%}.world-tree{font-size:52px;right:1%}.world-controls{padding:11px;gap:7px}.world-controls .move-controls{width:100%;margin:0}.world-controls button{padding:10px 11px;flex:1;font-size:12px}.world-controls .move-controls button{font-size:16px}.world-tip{line-height:1.5}}
+@media(prefers-reduced-motion:reduce){.world-pet svg,.world-cloud{animation:none!important}.world-pet{transition:none}}
+
 </style>
 </head>
 <body>
@@ -83,7 +121,16 @@
 <div class="lower-grid"><div class="panel"><div class="panel-title"><h3>✧ Aktivitas Terbaru</h3><span>CATATAN PET</span></div><div class="activity-list" id="activityList"></div></div><div class="panel"><div class="panel-title"><h3>☾ Teman kecilmu</h3><span>PROFILE</span></div><div class="profile-panel"><div class="profile-pet">🐱</div><div class="profile-details"><span class="tag" id="homeLevelTag">LEVEL 1 · NEW FRIEND</span><h3 id="homePetName">Twidy</h3><p id="homePetDesc">Kucing kecil yang penasaran, suka camilan, dan senang menghabiskan waktu bersamamu.</p><button class="secondary" data-page="profile">Lihat profil →</button></div></div></div></div>
 </section>
 
-<section class="content-section" id="page-pet"><h2 class="page-title">Teman Pet ♡</h2><p class="page-desc">Hari-hari kecil yang menyenangkan dimulai dari perhatianmu. Setiap aksi membuat Twidy tumbuh dan mengenalmu lebih dekat.</p>
+<section class="content-section" id="page-pet"><h2 class="page-title">Teman Pet ♡</h2><p class="page-desc">Temui Twidy di dunia kecilnya. Gerakkan, ajak melompat, berlari, menari, dan berinteraksi langsung dengannya.</p>
+<div class="pet-world" id="petWorld">
+ <div class="pet-world-head"><div><strong>🌿 Twidy's Little World</strong><small>Tempat bermain • cuaca cerah</small></div><span class="world-status" id="worldMood">● Twidy bahagia</span></div>
+ <div class="pet-world-scene" id="petWorldScene" aria-label="Area bermain interaktif Twidy">
+  <div class="world-sun"></div><div class="world-cloud"></div><div class="world-cloud c2"></div><div class="world-hill"></div><div class="world-hill h2"></div><div class="world-path"></div><span class="world-tree">🌳</span><span class="world-flower f1">🌼</span><span class="world-flower f2">🌷</span><span class="world-flower f3">🌸</span>
+  <div class="world-pet" id="worldPet" role="button" tabindex="0" aria-label="Sentuh Twidy untuk mengelus"><div class="pet-bubble" id="worldBubble">Purr~ ♡</div><div class="pet-shadow"></div></div>
+ </div>
+ <div class="world-controls"><div class="move-controls"><button type="button" id="worldLeft" aria-label="Jalan ke kiri">◀</button><button type="button" id="worldRight" aria-label="Jalan ke kanan">▶</button><button type="button" id="worldRun">🏃 Lari</button></div><button type="button" id="worldJump" class="primary-world">⬆ Lompat</button><button type="button" id="worldDance">💃 Menari</button><button type="button" id="worldPetBtn">♡ Elus</button><button type="button" id="worldFeed">🍓 Makan</button><button type="button" id="worldSleep">🌙 Tidur</button></div>
+ <div class="world-tip">Tip: gunakan tombol ◀ ▶ atau tombol panah keyboard. Tekan spasi untuk melompat. Kamu juga bisa menyentuh Twidy langsung!</div>
+</div>
 <div class="hero"><div class="hero-copy"><div class="eyebrow"><i></i> YOUR BEST LITTLE FRIEND</div><h2>Hai, aku <span id="petNameHero">Twidy!</span></h2><p id="petMoodText">Aku senang kamu datang. Mau bermain denganku hari ini?</p><div class="hero-actions"><button class="primary" data-action="care" data-care="feed">🍓 Beri camilan</button><button class="secondary" data-action="care" data-care="play">🧶 Main bersama</button></div></div><div class="pet-stage"><div class="orb"></div><span class="spark s1">✦</span><span class="spark s2">✧</span><svg class="twidy-art" viewBox="0 0 300 310" aria-label="Maskot kucing Twidy"><use href="#none"/></svg><div style="font-size:130px;filter:drop-shadow(0 18px 18px #0005);animation:float 4s infinite">🐱</div></div></div>
 <div class="lower-grid"><div class="panel"><div class="panel-title"><h3>Status kebutuhan</h3><span>REAL-TIME</span></div><div class="needs" id="petNeeds"></div></div><div class="panel"><div class="panel-title"><h3>Rawat dengan kasih ♡</h3><span>AKSI PET</span></div><div class="quick-actions"><button class="action-card" data-action="care" data-care="feed"><span class="action-emoji">🍓</span><strong>Beri Makan</strong><small>+25 kenyang · 15 koin</small></button><button class="action-card" data-action="care" data-care="play"><span class="action-emoji">🧶</span><strong>Bermain</strong><small>+18 bahagia · 10 energi</small></button><button class="action-card" data-action="care" data-care="clean"><span class="action-emoji">🫧</span><strong>Mandi</strong><small>+25 kebersihan</small></button><button class="action-card" data-action="care" data-care="sleep"><span class="action-emoji">🌙</span><strong>Tidur</strong><small>+30 energi</small></button></div><p class="tiny-note">Statistik pet tersimpan otomatis di browser perangkat ini. Rawat Twidy secara rutin agar semua kebutuhannya tetap seimbang.</p></div></div>
 </section>
@@ -195,6 +242,37 @@ function startGame(){
 $('#startGame').onclick=startGame;
 const originalStart=()=>{}; // game handler is replaced per round to support rapid taps.
 render();
+})();
+</script>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const scene=$('#petWorldScene'),pet=$('#worldPet'),bubble=$('#worldBubble'),status=$('#worldMood');
+if(!scene||!pet)return;
+const source=document.querySelector('#page-home .twidy-art');
+if(source){const art=source.cloneNode(true);art.removeAttribute('role');art.setAttribute('aria-hidden','true');pet.appendChild(art);}
+let x=50,face='right',walkTimer=null,actionTimer=null,isSleeping=false;
+function say(t){bubble.textContent=t;bubble.classList.add('show');clearTimeout(bubble._timer);bubble._timer=setTimeout(()=>bubble.classList.remove('show'),1900);}
+function setMood(t){status.textContent='● '+t;}
+function place(){pet.style.left=x+'%';pet.classList.toggle('facing-left',face==='left');}
+function stopMotion(){clearTimeout(actionTimer);pet.classList.remove('walking','running','jumping','dancing','sleeping');isSleeping=false;}
+function move(dir,run=false){stopMotion();face=dir<0?'left':'right';x=Math.max(9,Math.min(91,x+dir*(run?13:6)));place();pet.classList.add(run?'running':'walking');setMood(run?'Sedang berlari!':'Sedang berjalan');say(run?'Wheee!':'Tap tap...');actionTimer=setTimeout(()=>{pet.classList.remove('walking','running');setMood('Siap bermain')},run?500:470);}
+function jump(){stopMotion();pet.classList.add('jumping');setMood('Melompat tinggi!');say('Yattaaa! ✨');setTimeout(()=>{pet.classList.remove('jumping');setMood('Siap bermain')},650);}
+function dance(){stopMotion();pet.classList.add('dancing');setMood('Senang menari!');say('♪ (๑˃ᴗ˂)ﻭ ♫');actionTimer=setTimeout(()=>{pet.classList.remove('dancing');setMood('Twidy bahagia')},1800);}
+function sleep(){stopMotion();isSleeping=true;pet.classList.add('sleeping');setMood('Sedang tidur zzz');say('Zzz... 🌙');}
+function petting(){if(isSleeping){stopMotion();}say('Purr~ suka sekali! ♡');setMood('Merasa disayang');pet.classList.remove('sleeping');pet.animate([{transform:'translateX(-50%) scale(1)'},{transform:'translateX(-50%) scale(1.08,.94)'},{transform:'translateX(-50%) scale(1)'}],{duration:420});}
+$('#worldLeft').addEventListener('click',()=>move(-1));$('#worldRight').addEventListener('click',()=>move(1));
+$('#worldRun').addEventListener('click',()=>move(face==='left'?-1:1,true));
+$('#worldJump').addEventListener('click',jump);$('#worldDance').addEventListener('click',dance);$('#worldPetBtn').addEventListener('click',petting);
+$('#worldFeed').addEventListener('click',()=>{stopMotion();say('Nyam nyam! 🍓');setMood('Lagi makan');const b=document.querySelector('[data-care="feed"]');if(b)b.click();});
+$('#worldSleep').addEventListener('click',()=>{sleep();const b=document.querySelector('#page-pet [data-care="sleep"]');if(b)b.click();});
+pet.addEventListener('click',petting);pet.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();petting();}});
+document.addEventListener('keydown',e=>{if(!document.querySelector('#page-pet.active')||/INPUT|TEXTAREA/.test(document.activeElement.tagName))return;if(e.key==='ArrowLeft'){e.preventDefault();move(-1)}else if(e.key==='ArrowRight'){e.preventDefault();move(1)}else if(e.code==='Space'){e.preventDefault();jump();}});
+let wander=setInterval(()=>{if(document.hidden||!document.querySelector('#page-pet.active')||isSleeping||Math.random()>.48)return;move(Math.random()>.5?1:-1,false);},4200);
+const obs=new MutationObserver(()=>{if(!document.querySelector('#page-pet.active')){clearTimeout(actionTimer);pet.classList.remove('walking','running','jumping','dancing');}});
+obs.observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']});
+place();setTimeout(()=>say('Ayo jalan-jalan! ♡'),700);
 })();
 </script>
 </body>
